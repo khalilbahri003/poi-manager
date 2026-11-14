@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: poi-manager
+    runtime: node
+    plan: 0.5c-512mb
+    region: frankfurt
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm start:prod
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 24.20.0
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: TRUST_PROXY
+        value: "1"
+      - key: SESSION_SECRET
+        generateValue: true
+    disk:
+      name: poi-data
+      mountPath: /var/data
+      sizeGB: 1
